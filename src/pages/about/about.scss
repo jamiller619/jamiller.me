@@ -1,0 +1,8 @@
+@import '/shared/breakpoints';
+
+.logoArt {
+  height: 4rem;
+  @media #{$breakpoint-not-small} {
+    height: 5rem;
+  }
+}

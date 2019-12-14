@@ -1,0 +1,28 @@
+@import '@jamr/tachyons.js/tachyons.css';
+@import url('https://use.typekit.net/hzi1zjb.css');
+@import './colors';
+
+body {
+  background: $black;
+  color: $white;
+  font-family: 'stolzl', sans-serif;
+  font-weight: 400;
+  text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.03em;
+
+  margin: 0;
+  display: grid;
+  place-items: center;
+  height: 100vh;
+}
+
+a {
+  color: $red;
+  text-decoration-skip: ink;
+}
+
+#root {
+  width: 100%;
+}

@@ -1,0 +1,27 @@
+@import '/shared/colors';
+
+.header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1;
+  background: rgba($black, 0.6);
+  backdrop-filter: blur(5px);
+
+  > * {
+    opacity: 0;
+  }
+}
+
+.logo {
+  width: 70px;
+  height: 1em;
+  fill: $red;
+}
+
+.link > * {
+  height: 1em;
+  line-height: 1;
+  opacity: 0;
+}
