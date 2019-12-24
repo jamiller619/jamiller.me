@@ -30,6 +30,9 @@ const useMemoRef = (getter, deps) => {
   const getCurrentValue = () => (temp ? temp : (temp = getter()))
 
   Object.defineProperty(ref, 'current', {
+    set(value) {
+      if (temp === null) temp = value
+    },
     get() {
       if (hasDeps) {
         if (areDepsEqual()) {

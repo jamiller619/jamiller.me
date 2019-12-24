@@ -1,7 +1,7 @@
 {
   "projects": [
     {
-      "id": "witw",
+      "id": "where-in-the-world",
       "title": "Where In The World",
       "description": "Description here at some point.",
       "date": "2018",
@@ -20,8 +20,18 @@
         }
       ],
       "thumbnail": {
-        "src": "./images/witw/cover.png",
+        "src": "images/where-in-the-world/cover.png",
         "alt": "Where In The World logo"
+      }
+    },
+    {
+      "id": "suzy",
+      "title": "Suzy",
+      "description": "A desktop app for Pandora radio.",
+      "date": "2019",
+      "thumbnail": {
+        "src": "images/suzy/cover.png",
+        "alt": "Suzy logo"
       }
     },
     {
@@ -30,17 +40,17 @@
       "description": "A desktop app for managing fonts.",
       "date": "2019",
       "thumbnail": {
-        "src": "./images/fontjam/cover.jpg",
+        "src": "images/fontjam/cover.png",
         "alt": "Fontjam logo"
       }
     },
     {
-      "id": "yes-work",
-      "title": "Yes Work",
-      "description": "Two at-home interview projects.",
+      "id": "eight-hours",
+      "title": "Eight Hours",
+      "description": "Two at-home interview projects. No more than eight hours.",
       "date": "2018",
       "thumbnail": {
-        "src": "./images/yes-work/cover.jpg",
+        "src": "images/eight-hours/cover.png",
         "alt": "Gold typography on a yellow background."
       }
     },
@@ -50,7 +60,7 @@
       "description": "A JavaScript library for creating user interfaces on the modern web via Web Components.",
       "date": "2017",
       "thumbnail": {
-        "src": "./images/fresh/cover.jpg",
+        "src": "images/fresh/cover.jpg",
         "alt": "Fresh logo"
       },
       "links": {
@@ -64,7 +74,7 @@
       "title": "Spring",
       "description": "A minimal new tab page for Google Chrome.",
       "thumbnail": {
-        "src": "./images/spring/cover.jpg",
+        "src": "images/spring/cover.jpg",
         "alt": "Spring logo with laptop showing the app"
       },
       "links": {
@@ -77,7 +87,7 @@
       "title": "InstantPlex",
       "description": "An experiment in full-stack development turned small success.",
       "thumbnail": {
-        "src": "./images/instantplex/cover.jpg",
+        "src": "images/instantplex/cover.jpg",
         "alt": "InstantPlex logo"
       }
     },
@@ -86,25 +96,25 @@
       "title": "Navilla Vapor",
       "description": "My work as Art & Creative Director of the Navilla Vapor Company.",
       "thumbnail": {
-        "src": "./images/navilla/cover.jpg",
+        "src": "images/navilla/cover.jpg",
         "alt": "Various Navilla logotypes"
       }
     },
     {
-      "id": "rad",
+      "id": "random-acts-of-design",
       "title": "R.A.D.",
       "description": "Random Acts of Design: A graphic collection of visual design from various projects.",
       "thumbnail": {
-        "src": "./images/rad/cover.jpg",
+        "src": "images/random-acts-of-design/cover.jpg",
         "alt": "Moonbeam logo"
       }
     },
     {
-      "id": "rap",
+      "id": "random-acts-of-photography",
       "title": "R.A.P.",
       "description": "Random Acts of Photography: A graphic collection of photos from an aspiring amateur photographer.",
       "thumbnail": {
-        "src": "./images/rap/cover.jpg",
+        "src": "images/random-acts-of-photography/cover.jpg",
         "alt": "A curve on a road in the mountains."
       }
     }

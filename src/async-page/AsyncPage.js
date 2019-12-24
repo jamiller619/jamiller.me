@@ -1,8 +1,21 @@
-import React, { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef } from 'react'
+
+const error = page =>
+  Error(
+    `AsyncPage render returned "${typeof page}". Check console for more information.`
+  )
 
 const renderPage = (renders, props) => {
-  return new Promise(resolve => {
-    renders().then(page => resolve(page.default(props)))
+  return new Promise((resolve, reject) => {
+    renders().then(page => {
+      if (page.default) {
+        resolve(page.default(props))
+      } else {
+        console.error('AsyncPage render returned invalid with props: ', props)
+
+        reject(error(page.default))
+      }
+    })
   })
 }
 

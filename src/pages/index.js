@@ -1,9 +1,13 @@
 import React from 'react'
 import AsyncPage from '/async-page/AsyncPage'
+import { ProjectCard, ProjectPage } from './project'
 
-export const Home = props => (
+const Home = props => (
   <AsyncPage {...props} renders={() => import('./home/Home')} />
 )
-export const About = props => (
+
+const About = props => (
   <AsyncPage {...props} renders={() => import('./about/About')} />
 )
+
+export { Home, About, ProjectCard, ProjectPage }

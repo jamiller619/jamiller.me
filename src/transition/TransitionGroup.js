@@ -9,7 +9,7 @@ const useTransitionState = (location, path) => {
   return 'leave'
 }
 
-export const useTransition = (path, callback) => () => {
+export const useTransition = (path, callback, deps) => () => {
   const location = useLocation()
   const lastLocation = useRef()
   const ref = useRef()
@@ -26,7 +26,7 @@ export const useTransition = (path, callback) => () => {
     setTimeout(() => {
       lastLocation.current = location
     }, 10)
-  })
+  }, deps)
 
   return {
     ref

@@ -1,5 +1,5 @@
 import data from './data.json'
-import images from '../images/**/*.{jpg,png}'
+import images from './images/**/*.{jpg,png}'
 
 const getProjectImages = projectId => {
   const found = images[projectId]
@@ -23,7 +23,7 @@ const initProject = (project = {}) => {
   return {
     ...project,
     coverImage,
-    images
+    images: images || {}
   }
 }
 

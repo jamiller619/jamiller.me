@@ -1,16 +1,27 @@
 @import '/shared/colors';
 
 .header {
-  position: fixed;
+  position: sticky;
   top: 0;
   right: 0;
   left: 0;
-  z-index: 1;
-  background: rgba($black, 0.6);
-  backdrop-filter: blur(5px);
+  z-index: 3;
+  background: rgba($black, 0.8);
+  backdrop-filter: saturate(180%) blur(20px);
+  line-height: 1;
+  margin-left: -1rem;
+  margin-right: -1rem;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
 
   > * {
-    opacity: 0;
+    flex: 1;
+    position: relative;
+    margin: -0.5em;
+
+    > * {
+      position: absolute;
+    }
   }
 }
 
@@ -23,5 +34,4 @@
 .link > * {
   height: 1em;
   line-height: 1;
-  opacity: 0;
 }
