@@ -1,46 +1,79 @@
-import React, { useRef, useEffect } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import { useSpring, animated } from 'react-spring'
-import { useLocation, useParams } from 'react-router-dom'
+
 import Hero from './Hero'
-import { ProjectGrid, ProjectPage } from '/pages/project'
+import ProjectGrid from './ProjectGrid'
+import Fresh from '/pages/project/Fresh'
 import Footer from '/footer/Footer'
 
+import useRouteParams from '/shared/useRouteParams'
 import useMeasure from '/shared/useMeasure'
-import colors from '/shared/colors.scss'
 
-const SlidingProjectGrid = animated(ProjectGrid)
+if (window.history.scrollRestoration) {
+  window.history.scrollRestoration = 'manual'
+}
+
+// const HeroWithRef = React.forwardRef((props, ref) => (
+//   <Hero {...props} forwardRef={ref} />
+// ))
+
+const AnimatedProject = animated(Fresh)
+
+const constantState = {
+  position: 'relative',
+  top: '-50vh',
+  width: '100%'
+}
+
+const startState = {
+  y: 100,
+  opacity: 0
+}
+
+const restState = {
+  y: 0,
+  opacity: 1,
+  delay: 400
+}
+
+const ProjectPage = ({ id }) => {
+  const [{ y, ...spring }, set] = useSpring(() => startState)
+
+  const style = {
+    ...constantState,
+    ...spring,
+    transform: y.interpolate(v => `translate3d(0, ${v}px, 0)`)
+  }
+
+  const enter = () => set(restState)
+
+  useEffect(() => {
+    if (id != null) {
+      setTimeout(enter, restState.delay)
+    } else {
+      set(startState)
+    }
+  }, [id])
+
+  return id ? <AnimatedProject style={style} /> : null
+}
 
 const Home = () => {
-  const location = useLocation()
-  const { id } = useParams()
-  const [bind, { width }] = useMeasure()
-  const isHome = location.pathname === '/'
-
-  const { value } = useSpring({
-    value: isHome ? 0 : 1,
-    from: {
-      value: isHome ? 1 : 0
-    }
-    // onFrame(props) {
-    //   window.scroll(0, window.scrollY - window.scrollY / props.value)
-    // }
-  })
+  const { id: projectId } = useRouteParams('/project/:id')
+  const isActive = projectId != null
+  const [heroMeasureRef, { height, width }] = useMeasure()
 
   return (
-    <div {...bind}>
-      {id && <ProjectPage id={id} />}
-      <Hero show={isHome} />
-      {width && <ProjectGrid width={width} />}
-      {/* {width && (
-        <SlidingProjectGrid
-          width={width}
-          style={{
-            transform: value.interpolate(v => `translate3d(0, ${v * -40}vh, 0)`)
-          }}
-        />
-      )} */}
-      {/* <Footer /> */}
-    </div>
+    <Fragment>
+      <Hero show={!isActive} ref={heroMeasureRef} />
+      {(width && height && (
+        <ProjectGrid width={width} top={height + 100}>
+          {projectId ? <ProjectPage id={projectId} /> : null}
+        </ProjectGrid>
+      )) ||
+        null}
+      <Footer />
+    </Fragment>
   )
 }
 

@@ -1,39 +1,27 @@
-import { useRef, useState, useEffect } from 'react'
-// import ResizeObserver from 'resize-observer-polyfill'
+import { useRef, useState, useLayoutEffect } from 'react'
 
-const useMeasure = (deps = []) => {
+/**
+ * measure a DOM node!
+ * @example
+ * const [bind, dimensions] = useMeasure()
+ * // then, bind to element
+ * <div {...bind}>Measure me</div>
+ * @returns {Array.<{bind: Object, dimensions: Object}>}
+ * returns an array
+ */
+const useMeasure = () => {
   const ref = useRef()
-  const [bounds, setState] = useState(new DOMRect())
-  const scrollHandler = () => {
-    window.requestAnimationFrame(() => {
-      if (ref.current && ref.current.isConnected) {
-        setState(ref.current.getBoundingClientRect())
-      }
-    })
+  const [dimensions, set] = useState(new DOMRect())
+
+  const measure = () => {
+    if (ref.current && ref.current.isConnected) {
+      set(ref.current.getBoundingClientRect())
+    }
   }
 
-  useEffect(() => {
-    scrollHandler()
-    // window.addEventListener('scroll', scrollHandler)
+  useLayoutEffect(measure, [ref.current])
 
-    return () => {
-      // window.removeEventListener('scroll', scrollHandler)
-    }
-  }, deps)
-
-  return [{ ref }, bounds]
+  return [ref, dimensions]
 }
-
-// const useMeasure = () => {
-//   const ref = useRef()
-//   const [bounds, set] = useState({ left: 0, top: 0, width: 0, height: 0 })
-//   const [ro] = useState(
-//     () => new ResizeObserver(([entry]) => set(entry.contentRect))
-//   )
-
-//   useEffect(() => (ro.observe(ref.current), ro.disconnect), [])
-
-//   return [{ ref }, bounds]
-// }
 
 export default useMeasure

@@ -68,6 +68,55 @@
         "npm": "https://www.npmjs.com/package/freshdom/",
         "github": "https://github.com/jamiller619/freshdom"
       }
+    },
+    {
+      "id": "spring",
+      "title": "Spring",
+      "description": "A minimal new tab page for Google Chrome.",
+      "thumbnail": {
+        "src": "images/spring/cover.jpg",
+        "alt": "Spring logo with laptop showing the app"
+      },
+      "links": {
+        "webstore": "https://chrome.google.com/webstore/detail/spring/lcomlokgcbklomfecjjpjlncapnhepbl",
+        "github": "https://github.com/jamiller619/spring"
+      }
+    },
+    {
+      "id": "instantplex",
+      "title": "InstantPlex",
+      "description": "An experiment in full-stack development turned small success.",
+      "thumbnail": {
+        "src": "images/instantplex/cover.jpg",
+        "alt": "InstantPlex logo"
+      }
+    },
+    {
+      "id": "navilla",
+      "title": "Navilla Vapor",
+      "description": "My work as Art & Creative Director of the Navilla Vapor Company.",
+      "thumbnail": {
+        "src": "images/navilla/cover.jpg",
+        "alt": "Various Navilla logotypes"
+      }
+    },
+    {
+      "id": "random-acts-of-design",
+      "title": "R.A.D.",
+      "description": "Random Acts of Design: A graphic collection of visual design from various projects.",
+      "thumbnail": {
+        "src": "images/random-acts-of-design/cover.jpg",
+        "alt": "Moonbeam logo"
+      }
+    },
+    {
+      "id": "random-acts-of-photography",
+      "title": "R.A.P.",
+      "description": "Random Acts of Photography: A graphic collection of photos from an aspiring amateur photographer.",
+      "thumbnail": {
+        "src": "images/random-acts-of-photography/cover.jpg",
+        "alt": "A curve on a road in the mountains."
+      }
     }
   ]
 }

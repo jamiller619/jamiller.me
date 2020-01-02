@@ -70,7 +70,7 @@ const getTransitionProps = (nextLocation, lastLocation) => {
   }
 }
 
-const TransitionsContainer = () => {
+const TransitionContainer = () => {
   const location = useLocation()
   const lastLocation = useRef(null)
 
@@ -86,10 +86,10 @@ const TransitionsContainer = () => {
   })
 
   return transitions.map(({ item, key, props, state }) => {
-    console.log(state)
+    console.log('TransitionContainer state changed: ', state)
 
     return (
-      <animated.div key={key} style={props}>
+      <animated.div id="transition" key={key} style={props}>
         <Switch location={item}>
           <Route key="about" path="/about">
             <About />
@@ -103,4 +103,4 @@ const TransitionsContainer = () => {
   })
 }
 
-export default TransitionsContainer
+export default TransitionContainer

@@ -1,8 +1,11 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useSpring, animated } from 'react-spring'
-import { useScroll } from 'react-use-gesture'
 import styled from '/tachyons/styled'
 
+// const Container = styled(
+//   React.forwardRef((props, ref) => <animated.div {...props} ref={ref} />),
+//   'pv5-ns pt5 ph6-l ph3 relative flex flex-column justify-end'
+// )
 const Container = styled(
   animated.div,
   'pv5-ns pt5 ph6-l ph3 relative flex flex-column justify-end'
@@ -13,7 +16,7 @@ const Span = styled(animated.span, 'db')
 const RedSpan = styled(Span, 'red')
 
 // eslint-disable-next-line max-lines-per-function
-const Hero = ({ show = true } = {}) => {
+const Hero = ({ forwardRef, show = true, ...props } = {}) => {
   const { value } = useSpring({
     value: show ? 1 : 0,
     from: {
@@ -22,19 +25,11 @@ const Hero = ({ show = true } = {}) => {
   })
 
   const fadeToggle = () => ({ opacity: value.interpolate(v => v) })
-  const scrollHandler = ({ xy: [_, y] }) => {
-    if (y < 300) {
-    }
-  }
-
-  const bind = useScroll(scrollHandler, {
-    domTarget: window
-  })
-
-  useEffect(bind, [bind])
 
   return (
     <Container
+      {...props}
+      ref={forwardRef}
       style={{
         transform: value
           .interpolate({ range: [0, 1], output: [-8, 0] })
@@ -59,4 +54,8 @@ const Hero = ({ show = true } = {}) => {
   )
 }
 
-export default Hero
+// export default Hero
+
+export default React.forwardRef((props, ref) => (
+  <Hero {...props} forwardRef={ref} />
+))

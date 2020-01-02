@@ -27,9 +27,9 @@ const AsyncPage = ({ renders, ...props }) => {
 
   useEffect(() => {
     isMounted.current = true
-    renderPage(renders, props).then(page => {
+    renderPage(renders, props).then(p => {
       if (isMounted.current) {
-        setState({ page })
+        setState({ page: p })
       }
     })
 

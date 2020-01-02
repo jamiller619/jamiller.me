@@ -1,11 +1,12 @@
 import React from 'react'
+import { animated, useTransition } from 'react-spring'
 import styled from '/tachyons/styled'
 
 import styles from './about.scss'
 import colors from '/shared/colors.scss'
 import logoart from '/images/logoart.png'
 
-const Container = styled('div', 'pb5')
+const Container = styled(animated.div, 'pb5')
 const LogoArt = styled('div', 'pa3-ns nl3-ns w-75-l w-80', {
   className: styles.logoArt
 })
@@ -76,9 +77,10 @@ Section.Copy = () => {
   )
 }
 
-const About = () => {
+const About = props => {
   return (
     <Container
+      {...props}
       style={{
         background: colors.black
       }}>
@@ -88,4 +90,4 @@ const About = () => {
   )
 }
 
-export default About
+export default props => <About {...props} />
