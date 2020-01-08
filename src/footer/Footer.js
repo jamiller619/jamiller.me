@@ -1,9 +1,10 @@
 import React from 'react'
+import { animated } from 'react-spring'
 import tachyons from '@jamr/tachyons.js'
 
 import styled from '/tachyons/styled'
 
-const Container = styled('footer', 'ma3')
+const Container = styled(animated('footer'), 'ma3')
 const InnerContainer = styled(
   'div',
   'pt5 ph6-l pa3 bt bw2 b--black-10 f5-ns f6 ph3 lh-copy center pb2'
@@ -14,9 +15,9 @@ const Link = styled('a', 'hover-black')
 const LinkList = styled('div', 'pt3')
 const Copyright = styled('div', 'ph6-l pa3 pt5-ns db f4-ns f5 gray')
 
-const Footer = () => {
+const Footer = props => {
   return (
-    <Container>
+    <Container {...props}>
       <InnerContainer>
         <HugeLink href="mailto:hello@jamiller.me">hello@jamiller.me</HugeLink>
         <Message>

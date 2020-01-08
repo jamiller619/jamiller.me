@@ -137,14 +137,14 @@ const Home = () => {
   )
 
   const handleContentRest = () => {
-    const innerGridStyle = gridRef.current.firstChild.style
+    const gridStyle = gridRef.current.style
 
     if (contentRef.current) {
       const { height } = contentRef.current.getBoundingClientRect()
 
-      innerGridStyle.minHeight = `${height + navbarHeight + margin * 2}px`
+      gridStyle.minHeight = `${height + navbarHeight + margin * 2}px`
     } else {
-      innerGridStyle.minHeight = '100%'
+      gridStyle.minHeight = '100%'
     }
   }
 
@@ -155,7 +155,17 @@ const Home = () => {
     }
   })
 
+  const [footerSpring, setFooterSpring] = useSpring(() => {
+    return {
+      opacity: 1
+    }
+  })
+
   const handleTransitionBegin = () => {
+    setFooterSpring({
+      opacity: 0
+    })
+
     window.requestAnimationFrame(() => {
       disableBodyScroll()
 
@@ -169,6 +179,10 @@ const Home = () => {
   }
 
   const handleTransitionComplete = () => {
+    setFooterSpring({
+      opacity: 1
+    })
+
     window.requestAnimationFrame(() => {
       enableBodyScroll()
 
@@ -232,7 +246,7 @@ const Home = () => {
           )
         }}
       </Grid>
-      <Footer />
+      <Footer style={footerSpring} />
     </Fragment>
   )
 }

@@ -19,11 +19,11 @@ const styles = {
 }
 
 const GridItem = ({ index, pageWidth, columns, heights, margin }) => {
-  const width = pageWidth / columns
+  const width = pageWidth / columns - margin
   const row = Math.floor(index / columns)
   const column = heights.indexOf(Math.min(...heights))
   const height = width * (3 / 4) - margin
-  const x = column * (pageWidth / columns)
+  const x = column * width + margin
   const y = row * (width * (3 / 4))
   const xy = [x, y]
 
@@ -131,8 +131,11 @@ const Grid = ({
   }, deps)
 
   return (
-    <div {...props} style={styles.outer} ref={forwardRef}>
-      <div style={{ ...styles.inner, height: gridHeight }} ref={measureRef}>
+    <div
+      {...props}
+      style={{ ...styles.outer, height: gridHeight }}
+      ref={forwardRef}>
+      <div style={styles.inner} ref={measureRef}>
         {transition.map(({ item, key, props: transitionProps }) =>
           children({
             item,

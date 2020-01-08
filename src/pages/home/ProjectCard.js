@@ -149,7 +149,7 @@ const Backdrop = ({
 
   const { rx, opacity } = useSpring({
     opacity: open ? 1 : 0,
-    rx: open ? 0 : 5
+    rx: open ? 0 : 2
   })
 
   return (
