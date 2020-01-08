@@ -1,20 +1,15 @@
 @import '/shared/breakpoints';
 @import '/shared/colors';
 
-.active {
-  .grid,
-  .project {
-    position: static;
-  }
-}
+// .active {
+//   .grid,
+//   .project {
+//     position: static;
+//   }
+// }
 
 .grid {
-  height: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  margin: 1rem;
+  position: relative;
 }
 
 .project {
@@ -27,7 +22,7 @@
   // border-radius: 1rem;
   // overflow: hidden;
 
-  &.active {
+  &.open {
     overflow: unset;
 
     a {

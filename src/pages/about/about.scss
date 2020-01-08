@@ -1,4 +1,11 @@
 @import '/shared/breakpoints';
+@import '/shared/colors';
+
+.container {
+  b {
+    color: $white;
+  }
+}
 
 .logoArt {
   height: 4rem;

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Article, Section } from './shared'
+import { Article, Section } from '../shared'
 
 const listResetStyle = {
   listStyleType: 'none'

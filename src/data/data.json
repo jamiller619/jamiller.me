@@ -5,30 +5,53 @@
       "title": "Where In The World",
       "description": "Description here at some point.",
       "date": "2018",
-      "gradient": [
-        {
-          "offset": "5%",
-          "stopColor": "#21113b"
-        },
-        {
-          "offset": "54%",
-          "stopColor": "#4a0f49"
-        },
-        {
-          "offset": "95%",
-          "stopColor": "#da412c"
-        }
-      ],
+      "gradient": {
+        "x1": "0",
+        "x2": "1",
+        "y1": "1",
+        "y2": "0",
+        "stops": [
+          {
+            "offset": "0%",
+            "stopColor": "#001829"
+          },
+          {
+            "offset": "60%",
+            "stopColor": "#3b1265"
+          },
+          {
+            "offset": "100%",
+            "stopColor": "#60266a"
+          }
+        ]
+      },
       "thumbnail": {
         "src": "images/where-in-the-world/cover.png",
         "alt": "Where In The World logo"
-      }
+      },
+      "coverBackdrop": "images/where-in-the-world/Bighead.jpg"
     },
     {
       "id": "suzy",
       "title": "Suzy",
       "description": "A desktop app for Pandora radio.",
       "date": "2019",
+      "gradient": {
+        "x1": "0",
+        "x2": "1",
+        "y1": "1",
+        "y2": "0",
+        "stops": [
+          {
+            "offset": "0%",
+            "stopColor": "#131313"
+          },
+          {
+            "offset": "100%",
+            "stopColor": "#1c1c1c"
+          }
+        ]
+      },
       "thumbnail": {
         "src": "images/suzy/cover.png",
         "alt": "Suzy logo"
@@ -39,19 +62,51 @@
       "title": "Fontjam",
       "description": "A desktop app for managing fonts.",
       "date": "2019",
+      "gradient": {
+        "x1": "0",
+        "x2": "1",
+        "y1": "1",
+        "y2": "0",
+        "stops": [
+          {
+            "offset": "0%",
+            "stopColor": "#1b1b1b"
+          },
+          {
+            "offset": "100%",
+            "stopColor": "#1f1f1f"
+          }
+        ]
+      },
       "thumbnail": {
         "src": "images/fontjam/cover.png",
         "alt": "Fontjam logo"
       }
     },
     {
-      "id": "eight-hours",
-      "title": "Eight Hours",
-      "description": "Two at-home interview projects. No more than eight hours.",
-      "date": "2018",
+      "id": "weathary",
+      "title": "Weathary",
+      "description": "A PWA weather app.",
+      "date": "2019",
+      "gradient": {
+        "x1": "0",
+        "x2": "1",
+        "y1": "1",
+        "y2": "0",
+        "stops": [
+          {
+            "offset": "0%",
+            "stopColor": "#3a2fd5"
+          },
+          {
+            "offset": "100%",
+            "stopColor": "#1b166a"
+          }
+        ]
+      },
       "thumbnail": {
-        "src": "images/eight-hours/cover.png",
-        "alt": "Gold typography on a yellow background."
+        "src": "images/weathary/cover.png",
+        "alt": "Weathary logo."
       }
     },
     {
@@ -59,6 +114,22 @@
       "title": "Fresh",
       "description": "A JavaScript library for creating user interfaces on the modern web via Web Components.",
       "date": "2017",
+      "gradient": {
+        "x1": "0",
+        "x2": "1",
+        "y1": "1",
+        "y2": "0",
+        "stops": [
+          {
+            "offset": "0%",
+            "stopColor": "#110d29"
+          },
+          {
+            "offset": "100%",
+            "stopColor": "#1e1941"
+          }
+        ]
+      },
       "thumbnail": {
         "src": "images/fresh/cover.png",
         "alt": "Fresh logo"
@@ -67,6 +138,35 @@
         "yarn": "https://yarnpkg.com/en/package/freshdom",
         "npm": "https://www.npmjs.com/package/freshdom/",
         "github": "https://github.com/jamiller619/freshdom"
+      }
+    },
+    {
+      "id": "spring",
+      "title": "Spring",
+      "description": "A minimal new tab page for Google Chrome.",
+      "gradient": {
+        "x1": "0",
+        "x2": "1",
+        "y1": "1",
+        "y2": "0",
+        "stops": [
+          {
+            "offset": "0%",
+            "stopColor": "#1b1b1b"
+          },
+          {
+            "offset": "55%",
+            "stopColor": "#202122"
+          },
+          {
+            "offset": "100%",
+            "stopColor": "#2d3033"
+          }
+        ]
+      },
+      "thumbnail": {
+        "src": "images/spring/cover.png",
+        "alt": "Spring logo with laptop showing the app"
       }
     }
   ]

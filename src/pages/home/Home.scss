@@ -1,0 +1,29 @@
+@import '/shared/breakpoints';
+@import '/shared/colors';
+
+.projectLink {
+  display: block;
+  height: 100%;
+  filter: grayscale(1);
+  transition: filter 300ms ease-out;
+  perspective: 1000px;
+
+  &.open {
+    filter: grayscale(0);
+  }
+
+  &.disabled {
+    pointer-events: none;
+    cursor: default;
+  }
+
+  &:hover,
+  &:focus {
+    filter: grayscale(0);
+  }
+
+  span {
+    width: 100%;
+    height: 100%;
+  }
+}

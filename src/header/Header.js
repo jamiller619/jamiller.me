@@ -1,6 +1,6 @@
 import React from 'react'
 import { animated, useTransition } from 'react-spring'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useHistory } from 'react-router-dom'
 import styled from '/tachyons/styled'
 
 import { ChevronLeft } from '/icons/Icon'
@@ -24,6 +24,7 @@ const IndexLink = styled(animated.span, 'inline-flex items-center')
 const AboutLinkContainer = styled('div', 'tr flex flex-column')
 
 const LinkWithoutUnderline = styled(animated(Link), 'no-underline')
+const Button = styled(animated('button'))
 
 const Logo = props => {
   return (
@@ -77,22 +78,23 @@ const LogoLink = () => {
 }
 
 const AboutLink = () => {
+  const history = useHistory()
   const transitions = useToggleTransition(path => path.includes('about'))
-  const style = props => ({ style: { ...props, right: 0 } })
+  const interpolator = props => ({ ...props, right: 0 })
+  const handleClose = () => history.goBack()
 
   return (
     <AboutLinkContainer>
       {transitions.map(({ item, key, props }) => {
         return item ? (
-          <LinkWithoutUnderline
-            to=""
-            onClick={() => history.back()}
-            key={key}
-            {...style(props)}>
+          <Button key={key} style={interpolator(props)} onClick={handleClose}>
             close
-          </LinkWithoutUnderline>
+          </Button>
         ) : (
-          <LinkWithoutUnderline to="/about" key={key} {...style(props)}>
+          <LinkWithoutUnderline
+            to="/about"
+            key={key}
+            style={interpolator(props)}>
             about
           </LinkWithoutUnderline>
         )

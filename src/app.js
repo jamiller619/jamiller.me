@@ -2,15 +2,16 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter as Router } from 'react-router-dom'
 import Header from '/header/Header'
-import TransitionContainer from '/pages/TransitionContainer'
+import TransitionRouter from '/pages/TransitionRouter'
 import tachyons from '@jamr/tachyons.js'
+import { routes, interpolator } from './routes'
 import '/shared/global.scss'
 
 const App = () => {
   return (
     <Router>
       <Header />
-      <TransitionContainer />
+      <TransitionRouter routes={routes} interpolator={interpolator} />
     </Router>
   )
 }

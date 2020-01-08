@@ -1967,6 +1967,11 @@ csstype@^2.6.7:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-2.6.7.tgz#20b0024c20b6718f4eda3853a1f5a1cce7f5e4a5"
   integrity sha512-9Mcn9sFbGBAdmimWb2gLVDtFJzeKtDGIr76TUqmjZrw9LFXBMSU70lcs+C0/7fyCd6iBDqmksUcCOUIkisPHsQ==
 
+curtainsjs@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/curtainsjs/-/curtainsjs-4.3.0.tgz#270c4fa81898d57769b9fed0d5eed2f86d89e7ac"
+  integrity sha512-5ZOQ2f4XOyUV+w8jGQuscLQSWD9kZV5la2C5hKoFpRhNxF9TPSZKtwsq9DtNaNcekTAQYzIDR/IDtyUBijwIig==
+
 dashdash@^1.12.0:
   version "1.14.1"
   resolved "https://registry.yarnpkg.com/dashdash/-/dashdash-1.14.1.tgz#853cfa0f7cbe2fed5de20326b8dd581035f6e2f0"

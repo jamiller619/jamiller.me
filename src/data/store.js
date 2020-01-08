@@ -3,6 +3,7 @@ import images from './images/**/*.{jpg,png}'
 
 const getProjectImages = projectId => {
   const found = images[projectId]
+
   if (found) {
     return found
   }
@@ -16,7 +17,7 @@ const initProject = (project = {}) => {
   const { id, thumbnail } = project
   const images = getProjectImages(id)
   const coverImage = {
-    src: images && images.cover && (images.cover.jpg || images.cover.png),
+    src: images && images.cover && images.cover.png,
     alt: thumbnail && thumbnail.alt
   }
 
