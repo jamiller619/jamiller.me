@@ -29,7 +29,7 @@
     "react-use-gesture": "^6.0.14",
     "react-useonload": "^1.0.1",
     "sass": "^1.23.6",
-    "three": ">=0.110"
+    "three": ">=0.125"
   },
   "devDependencies": {
     "@babel/core": "^7.7.2",
