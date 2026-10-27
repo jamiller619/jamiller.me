@@ -1,0 +1,90 @@
+@import url('https://use.typekit.net/hzi1zjb.css');
+
+@layer theme {
+  :root {
+    color-scheme: light dark;
+    --accent: light-dark(#000d8a, #d70eff);
+    --background: light-dark(#fff9f5, #0e0c0c);
+    --text: light-dark(#222939, #e5e9f0);
+    --surface: light-dark(rgba(0, 0, 0, 0.5), rgba(255, 255, 255, 0.5));
+  }
+  
+  html {
+    font-family: stolzl, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.05em;
+    overflow-x: clip;
+  }
+  
+  body {
+    background: var(--background);
+    color: var(--text);
+    max-width: 1080px;
+    margin: 0 auto;
+    font-size: 20px;
+	  line-height: 1.7;
+  }
+
+  @media (max-width: 720px) {
+    body {
+      font-size: 18px;
+    }
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--text);
+  }
+
+  h1 {
+    font-size: 3.052em;
+  }
+
+  h2 {
+    font-size: 2.441em;
+  }
+
+  h3 {
+    font-size: 1.953em;
+  }
+
+  h4 {
+    font-size: 1.563em;
+  }
+
+  h5 {
+    font-size: 1.25em;
+  }
+
+  a {
+    color: var(--accent);
+  }
+
+  a:hover {
+    color: var(--accent);
+  }
+
+  img {
+    border-radius: 8px;
+  }
+
+  pre {
+    padding: 1.5em;
+    border-radius: 8px;
+  }
+
+  code {
+    padding: 2px 5px;
+    background-color: var(--surface);
+    border-radius: 2px;
+  }
+
+  blockquote {
+    border-left: 4px solid var(--accent);
+    font-size: 1.333em;
+  }
+}
