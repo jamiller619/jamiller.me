@@ -1,4 +1,4 @@
-import { Canvas, useFrame, useLoader } from '@react-three/fiber';
+import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber';
 import { useEffect, useMemo, useRef } from 'react';
 import {
 	CanvasTexture,
@@ -6,13 +6,17 @@ import {
 	Group,
 	MathUtils,
 	Mesh,
+	type Object3D,
 	Quaternion,
+	Raycaster,
 	ShaderMaterial,
 	SRGBColorSpace,
 	Texture,
 	TextureLoader,
+	Vector2,
 	Vector3,
 } from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import styles from './Scene.module.css';
 
 const mockImages = [
@@ -128,12 +132,83 @@ const fragmentShader = `
 `;
 
 const globeRadius = 14;
-const latitudeLimit = 0.42;
+const latitudeLimit = 0.84;
 const columnCount = 24;
-const rowsPerColumn = 4;
+const rowsPerColumn = projects.length;
 const animationSpeed = 0.5;
-const globeRotationSpeed = 0.04 * animationSpeed;
+const globeRotationSpeed = 0.02 * animationSpeed;
 const forward = new Vector3(0, 0, 1);
+
+function isProjectCard(object: Object3D) {
+	let current: Object3D | null = object;
+
+	while (current) {
+		if (current.userData.isProjectCard === true) return true;
+		current = current.parent;
+	}
+
+	return false;
+}
+
+function SceneOrbitControls() {
+	const { camera, gl, scene } = useThree();
+	const controls = useRef<OrbitControls>(null);
+
+	useEffect(() => {
+		const domElement = gl.domElement;
+		const pointer = new Vector2();
+		const raycaster = new Raycaster();
+		const orbitControls = new OrbitControls(camera, domElement);
+		controls.current = orbitControls;
+		orbitControls.enabled = false;
+		orbitControls.enableDamping = true;
+		orbitControls.dampingFactor = 0.06;
+		orbitControls.enablePan = false;
+		orbitControls.rotateSpeed = 0.35;
+		orbitControls.zoomSpeed = 0.5;
+		orbitControls.minDistance = 17;
+		orbitControls.maxDistance = 30;
+		orbitControls.target.set(0, 0, -globeRadius);
+
+		const handlePointerDown = (event: PointerEvent) => {
+			const bounds = domElement.getBoundingClientRect();
+			pointer.set(
+				((event.clientX - bounds.left) / bounds.width) * 2 - 1,
+				-((event.clientY - bounds.top) / bounds.height) * 2 + 1,
+			);
+			raycaster.setFromCamera(pointer, camera);
+			const hitCard = raycaster
+				.intersectObjects(scene.children, true)
+				.some((intersection) => isProjectCard(intersection.object));
+
+			orbitControls.enabled = !hitCard;
+		};
+
+		const handlePointerUp = () => {
+			window.setTimeout(() => {
+				orbitControls.enabled = false;
+			}, 0);
+		};
+
+		domElement.addEventListener('pointerdown', handlePointerDown, true);
+		window.addEventListener('pointerup', handlePointerUp);
+		window.addEventListener('pointercancel', handlePointerUp);
+
+		return () => {
+			domElement.removeEventListener('pointerdown', handlePointerDown, true);
+			window.removeEventListener('pointerup', handlePointerUp);
+			window.removeEventListener('pointercancel', handlePointerUp);
+			orbitControls.dispose();
+			controls.current = null;
+		};
+	}, [camera, gl, scene]);
+
+	useFrame(() => {
+		controls.current?.update();
+	});
+
+	return null;
+}
 
 interface ProjectCardProps {
 	columnIndex: number;
@@ -188,7 +263,7 @@ function ProjectCard({
 		const initialLatitude =
 			-latitudeLimit + ((slotIndex + 0.5) / rowsPerColumn) * cycle;
 		const unwrappedLatitude =
-			initialLatitude + direction * animationTime * 0.0125;
+			initialLatitude + direction * animationTime * 0.009375;
 		const latitude =
 			((((unwrappedLatitude + latitudeLimit) % cycle) + cycle) % cycle) -
 			latitudeLimit;
@@ -222,6 +297,7 @@ function ProjectCard({
 		<group
 			ref={group}
 			name={title}
+			userData={{ isProjectCard: true }}
 			onPointerOut={() => {
 				hovered.current = false;
 				document.documentElement.style.cursor = '';
@@ -289,13 +365,9 @@ function PortfolioGrid() {
 		<group ref={globe} position={[0, 0, -globeRadius]}>
 			{Array.from({ length: columnCount }, (_, columnIndex) =>
 				Array.from({ length: rowsPerColumn }, (_, slotIndex) => {
-					const projectSetStart =
-						(columnIndex % 2) * rowsPerColumn;
-					const stagger =
-						Math.floor(columnIndex / 2) % rowsPerColumn;
+					const stagger = columnIndex % projects.length;
 					const projectIndex =
-						projectSetStart +
-						((slotIndex + stagger) % rowsPerColumn);
+						(slotIndex + stagger) % projects.length;
 					const project = projects[projectIndex];
 
 					return (
@@ -329,6 +401,7 @@ export default function Scene() {
 				dpr={[1, 2]}
 				gl={{ alpha: true, antialias: true }}
 			>
+				<SceneOrbitControls />
 				<PortfolioGrid />
 			</Canvas>
 		</section>
