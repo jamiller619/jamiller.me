@@ -87,4 +87,8 @@
     border-left: 4px solid var(--accent);
     font-size: 1.333em;
   }
+
+  .backdrop-blur {
+    backdrop-filter: blur(10px) saturate(0.8);
+  }
 }

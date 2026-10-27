@@ -6,6 +6,7 @@ import {
 	Group,
 	MathUtils,
 	Mesh,
+	PerspectiveCamera,
 	type Object3D,
 	Quaternion,
 	Raycaster,
@@ -137,6 +138,8 @@ const columnCount = 24;
 const rowsPerColumn = projects.length;
 const animationSpeed = 0.5;
 const globeRotationSpeed = 0.02 * animationSpeed;
+const cardWidth = 2.5;
+const cardHeight = 1.875;
 const forward = new Vector3(0, 0, 1);
 
 function isProjectCard(object: Object3D) {
@@ -151,7 +154,7 @@ function isProjectCard(object: Object3D) {
 }
 
 function SceneOrbitControls() {
-	const { camera, gl, scene } = useThree();
+	const { camera, gl, scene, size } = useThree();
 	const controls = useRef<OrbitControls>(null);
 
 	useEffect(() => {
@@ -201,11 +204,30 @@ function SceneOrbitControls() {
 			orbitControls.dispose();
 			controls.current = null;
 		};
-	}, [camera, gl, scene]);
+	}, [camera, gl, scene, size.height, size.width]);
 
 	useFrame(() => {
 		controls.current?.update();
 	});
+
+	return null;
+}
+
+function ResponsiveCamera() {
+	const { camera, size } = useThree();
+
+	useEffect(() => {
+		if (!(camera instanceof PerspectiveCamera)) return;
+
+		const aspect = size.width / Math.max(size.height, 1);
+		const portraitProgress = MathUtils.clamp((1.1 - aspect) / 0.7, 0, 1);
+
+		// Give portrait screens a little more breathing room without changing the
+		// authored card/globe proportions on desktop.
+		camera.fov = MathUtils.lerp(43, 54, portraitProgress);
+		camera.position.z = MathUtils.lerp(12, 15.3, portraitProgress);
+		camera.updateProjectionMatrix();
+	}, [camera, size.height, size.width]);
 
 	return null;
 }
@@ -309,7 +331,7 @@ function ProjectCard({
 			}}
 		>
 			<mesh ref={card}>
-				<planeGeometry args={[2.55, 1.9125, 1, 1]} />
+				<planeGeometry args={[cardWidth, cardHeight, 1, 1]} />
 				<shaderMaterial
 					ref={material}
 					fragmentShader={fragmentShader}
@@ -318,7 +340,7 @@ function ProjectCard({
 				/>
 			</mesh>
 			<mesh ref={titleLayer} position={[0, 0, 0.06]}>
-				<planeGeometry args={[2.55, 1.9125, 1, 1]} />
+				<planeGeometry args={[cardWidth, cardHeight, 1, 1]} />
 				<meshBasicMaterial
 					alphaTest={0.01}
 					depthWrite={false}
@@ -397,10 +419,11 @@ export default function Scene() {
 				))}
 			</ul>
 			<Canvas
-				camera={{ position: [0, 0, 9.2], fov: 43 }}
+				camera={{ position: [0, 0, 12], fov: 43 }}
 				dpr={[1, 2]}
 				gl={{ alpha: true, antialias: true }}
 			>
+				<ResponsiveCamera />
 				<SceneOrbitControls />
 				<PortfolioGrid />
 			</Canvas>
