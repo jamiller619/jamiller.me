@@ -15,12 +15,10 @@ const palette = /* glsl */ `
 const vertexShader = /* glsl */ `
   varying vec3 vNormal;
   varying vec3 vViewDirection;
-  varying vec3 vPosition;
   void main() {
     vec4 viewPosition = modelViewMatrix * vec4(position, 1.0);
     vNormal = normalize(normalMatrix * normal);
     vViewDirection = -viewPosition.xyz;
-    vPosition = position;
     gl_Position = projectionMatrix * viewPosition;
   }
 `
@@ -28,15 +26,11 @@ const vertexShader = /* glsl */ `
 const fragmentShader = /* glsl */ `
   varying vec3 vNormal;
   varying vec3 vViewDirection;
-  varying vec3 vPosition;
-  ${palette}
   void main() {
     float facing = max(dot(normalize(vNormal), normalize(vViewDirection)), 0.0);
     float rim = pow(1.0 - facing, 4.0);
-    float edge = pow(1.0 - facing, 16.0);
     vec3 color = vec3(0.003, 0.005, 0.025);
-    // Reduce rim emission by 60% and feather the silhouette into the halo.
-    color += glowColor(vPosition) * (rim * 0.85 + edge) * 0.4;
+    // Keep the body dark; the separate halo carries the colored emission.
     float edgeFade = smoothstep(0.0, 0.75, facing);
     gl_FragColor = vec4(color, (0.65 + rim * 0.35) * edgeFade);
     #include <tonemapping_fragment>
@@ -97,10 +91,11 @@ const haloFragment = /* glsl */ `
   void main() {
     vec2 p = (vUv - 0.5) * 4.4;
     float r = length(p);
-    // Broader, dimmer Gaussian bands give the rim a soft outward falloff.
-    float halo = exp(-pow((r - 1.0) / 0.55, 2.0)) * 0.096;
-    halo += exp(-pow((r - 1.0) / 0.85, 2.0)) * 0.024;
-    halo *= smoothstep(0.3, 0.95, r) * (1.0 - smoothstep(1.65, 2.2, r));
+    // Start outside the silhouette and disperse the color into the surrounding space.
+    float outerDistance = max(r - 1.0, 0.0);
+    float halo = exp(-pow(outerDistance / 0.35, 2.0)) * 0.22;
+    halo += exp(-pow(outerDistance / 0.7, 2.0)) * 0.055;
+    halo *= smoothstep(1.0, 1.06, r) * (1.0 - smoothstep(1.65, 2.2, r));
     gl_FragColor = vec4(glowColor(vec3(p, 0.0)), halo);
     #include <tonemapping_fragment>
     #include <colorspace_fragment>

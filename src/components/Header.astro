@@ -4,7 +4,7 @@ import HeaderLink from './HeaderLink.astro'
 import SocialLinks from './SocialLinks.astro'
 ---
 
-<header class="backdrop-blur">
+<header>
   <nav>
     <a href="/">
       <svg
@@ -14,16 +14,12 @@ import SocialLinks from './SocialLinks.astro'
         fill="currentColor"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <path
-          d="M14.2057 0.550311C15.4746 2.35542 16.1555 4.61945 15.9698 7.03645C15.5984 11.7787 11.7606 15.5725 7.0562 15.9702C4.6421 16.1538 2.38275 15.4807 0.556697 14.1957C-0.124204 13.7062 -0.186104 12.7271 0.401947 12.1458L12.163 0.397336C12.7201 -0.183969 13.7105 -0.122779 14.2057 0.550311Z"></path>
-        <path
-          d="M29.9056 0.678693L23.1264 14.1902C22.7312 15.0327 23.3088 16 24.2208 16H37.7792C38.6912 16 39.2688 15.0327 38.8736 14.1902L32.0944 0.678693C31.6384 -0.226231 30.3616 -0.226231 29.9056 0.678693Z"></path>
-        <path
-          d="M62.5652 15.9688C63.3478 15.9688 64 15.2828 64 14.4097V1.62528C64 0.253288 62.5 -0.526253 61.587 0.409196L55.913 5.8348C55.3913 6.3337 54.5761 6.3337 54.0543 5.8348L48.413 0.409196C47.5 -0.526253 46 0.253288 46 1.62528V14.4409C46 15.314 46.6522 16 47.4348 16H62.5652V15.9688Z"></path>
+        <path d="M14.2057 0.550311C15.4746 2.35542 16.1555 4.61945 15.9698 7.03645C15.5984 11.7787 11.7606 15.5725 7.0562 15.9702C4.6421 16.1538 2.38275 15.4807 0.556697 14.1957C-0.124204 13.7062 -0.186104 12.7271 0.401947 12.1458L12.163 0.397336C12.7201 -0.183969 13.7105 -0.122779 14.2057 0.550311Z"></path>
+        <path d="M29.9056 0.678693L23.1264 14.1902C22.7312 15.0327 23.3088 16 24.2208 16H37.7792C38.6912 16 39.2688 15.0327 38.8736 14.1902L32.0944 0.678693C31.6384 -0.226231 30.3616 -0.226231 29.9056 0.678693Z"></path>
+        <path d="M62.5652 15.9688C63.3478 15.9688 64 15.2828 64 14.4097V1.62528C64 0.253288 62.5 -0.526253 61.587 0.409196L55.913 5.8348C55.3913 6.3337 54.5761 6.3337 54.0543 5.8348L48.413 0.409196C47.5 -0.526253 46 0.253288 46 1.62528V14.4409C46 15.314 46.6522 16 47.4348 16H62.5652V15.9688Z"></path>
       </svg>
     </a>
     <div class="internal-links">
-      <HeaderLink href="/">index</HeaderLink>
       <HeaderLink href="/blog">blog</HeaderLink>
       <HeaderLink href="/about">about</HeaderLink>
     </div>
@@ -35,24 +31,47 @@ import SocialLinks from './SocialLinks.astro'
     position: relative;
     z-index: 1;
     margin: 0;
-    padding: 0 1em;
+    padding: 0.5rem 2rem;
+    color: var(--text);
+
+    a,
+    a.active {
+      text-decoration: none;
+      color: var(--text);
+    }
   }
 
-  h2 a,
-  h2 a.active {
-    text-decoration: none;
+  /* Extend the background while keeping navigation within the body's max-width. */
+  header::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset-block: 0;
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
+    background: oklch(0.23 0 0 / 0.8);
+    backdrop-filter: blur(20px) saturate(1.8);
+    pointer-events: none;
   }
+
   nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    font-weight: 600;
+    letter-spacing: 0.012em;
+
+    /* a {
+      pointer-events: auto;
+    } */
   }
-  nav a {
-  pointer-events: auto;
-    padding: 1em 0.5em;
-    color: var(--text);
-    border-bottom: 4px solid transparent;
-    text-decoration: none;
+  .internal-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    gap: 2rem;
   }
 
   :global(.social-links--header) {

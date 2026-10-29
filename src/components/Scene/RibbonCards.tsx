@@ -23,12 +23,14 @@ export default function RibbonCards({
 }) {
   const columns = useRef<Group>(null)
   const equatorSpacing = 2 * radius * Math.sin(ribbonSpacing)
+
   let width = Math.min(0.7, (equatorSpacing - ribbonWidth) * 0.6)
 
   const getLayout = (cardWidth: number) => {
     const height = (cardWidth * 3) / 4
     const halfAngle = Math.atan(height / 2 / (radius + 0.01))
     const latitudeStep = 2 * halfAngle * 1.35
+
     // Check clearance at the poleward edge, where neighboring loops are closest.
     const latitudeLimit = Math.max(
       0,

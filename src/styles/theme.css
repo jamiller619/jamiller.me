@@ -8,21 +8,21 @@
     --text: light-dark(#222939, #e5e9f0);
     --surface: light-dark(rgba(0, 0, 0, 0.5), rgba(255, 255, 255, 0.5));
   }
-  
+
   html {
     font-family: stolzl, sans-serif;
     -webkit-font-smoothing: antialiased;
     letter-spacing: -0.05em;
     overflow-x: clip;
   }
-  
+
   body {
     background: var(--background);
     color: var(--text);
     max-width: 1080px;
     margin: 0 auto;
     font-size: 20px;
-	  line-height: 1.7;
+    line-height: 1.7;
   }
 
   @media (max-width: 720px) {
@@ -89,6 +89,6 @@
   }
 
   .backdrop-blur {
-    backdrop-filter: blur(10px) saturate(0.8);
+    backdrop-filter: blur(20px) saturate(1.8);
   }
 }
