@@ -13,6 +13,28 @@ const ribbonCount = 8
 // Each full loop covers two opposite meridians; a half turn fills the sphere.
 const ribbonSpacing = Math.PI / ribbonCount
 
+export default function Scene() {
+  return (
+    <section
+      className={styles.root}
+      aria-label="Glowing orb surrounded by staggered 4:3 project cards"
+    >
+      <Canvas
+        camera={{ position: [0, 0, 3.2], fov: 45 }}
+        dpr={[1, 2]}
+        frameloop="always"
+        gl={{ alpha: true, antialias: true }}
+      >
+        <SoftOrbitControls />
+        <ambientLight intensity={0.7} />
+        <CameraLight />
+        <SphereWithCards />
+        <EdgeBlur />
+      </Canvas>
+    </section>
+  )
+}
+
 function CameraLight() {
   const light = useRef<DirectionalLight>(null)
 
@@ -39,32 +61,12 @@ function SphereWithCards() {
             ribbonWidth={ribbonWidth}
             ribbonSpacing={ribbonSpacing}
             stagger={(index % 2) * 0.5}
+            // Eight loops means opposite columns share the same parity.
+            direction={index % 2 === 0 ? 1 : -1}
             letterOffset={index}
           />
         </group>
       ))}
     </group>
-  )
-}
-
-export default function Scene() {
-  return (
-    <section
-      className={styles.root}
-      aria-label="Glowing orb surrounded by staggered 4:3 project cards"
-    >
-      <Canvas
-        camera={{ position: [0, 0, 3.5], fov: 45 }}
-        dpr={[1, 2]}
-        frameloop="always"
-        gl={{ alpha: true, antialias: true }}
-      >
-        <SoftOrbitControls />
-        <ambientLight intensity={0.7} />
-        <CameraLight />
-        <SphereWithCards />
-        <EdgeBlur />
-      </Canvas>
-    </section>
   )
 }

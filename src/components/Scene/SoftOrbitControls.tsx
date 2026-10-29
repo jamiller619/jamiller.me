@@ -18,6 +18,9 @@ export default function SoftOrbitControls() {
     orbit.enableZoom = false
     orbit.enableDamping = true
     orbit.dampingFactor = 0.08
+    // Drift horizontally once every ten minutes; pause while dragging.
+    orbit.autoRotate = true
+    orbit.autoRotateSpeed = 0.1
     orbit.minPolarAngle = (70 * Math.PI) / 180
     orbit.maxPolarAngle = (110 * Math.PI) / 180
     angles.current.setFromVector3(camera.position)
