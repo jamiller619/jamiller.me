@@ -1,11 +1,11 @@
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { useRef } from 'react'
+import { Suspense, useRef } from 'react'
 import type { DirectionalLight } from 'three'
 import SoftOrbitControls from './SoftOrbitControls'
 import styles from './Scene.module.css'
 import RibbonCards from './RibbonCards'
 import EdgeBlur from './EdgeBlur'
-import ParticleSphere from './ParticleSphere'
+import ParticleModel from './ParticleModel'
 
 const ribbonGap = 1
 const ribbonWidth = 0.25
@@ -17,7 +17,7 @@ export default function Scene() {
   return (
     <section
       className={styles.root}
-      aria-label="Particle sphere surrounded by staggered 4:3 project cards"
+      aria-label="JAM particle emblem surrounded by staggered 4:3 project cards"
     >
       <Canvas
         camera={{ position: [0, 0, 3.2], fov: 45 }}
@@ -53,7 +53,9 @@ function SphereWithCards() {
 
   return (
     <group>
-      <ParticleSphere radius={radius} />
+      <Suspense fallback={null}>
+        <ParticleModel radius={radius} />
+      </Suspense>
       {Array.from({ length: ribbonCount }, (_, index) => (
         <group key={index} rotation={[0, index * ribbonSpacing, 0]}>
           <RibbonCards

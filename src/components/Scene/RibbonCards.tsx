@@ -3,6 +3,7 @@ import { useRef } from 'react'
 import { MathUtils, type Group } from 'three'
 import Card from './Card'
 import { projects } from './projects'
+import { revealStagger, revealStaggerSteps } from './cardReveal'
 
 const latitudeSpeed = 0.008 // Radians per second.
 
@@ -90,6 +91,10 @@ export default function RibbonCards({
                   width={width}
                   fadeStart={fadeStart}
                   fadeEnd={wrapLimit}
+                  entranceDelay={
+                    ((index + letterOffset) % (revealStaggerSteps + 1)) *
+                    revealStagger
+                  }
                   project={
                     projects[(index * 2 + letterOffset) % projects.length]
                   }

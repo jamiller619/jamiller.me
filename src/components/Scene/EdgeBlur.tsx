@@ -71,6 +71,7 @@ export default function EdgeBlur() {
     composer: EffectComposer
     horizontal: ShaderPass
     vertical: ShaderPass
+    output: ShaderPass
     orbTarget: WebGLRenderTarget
   } | null>(null)
 
@@ -142,7 +143,7 @@ export default function EdgeBlur() {
     composer.addPass(horizontal)
     composer.addPass(vertical)
     composer.addPass(output)
-    pipeline.current = { composer, horizontal, vertical, orbTarget }
+    pipeline.current = { composer, horizontal, vertical, output, orbTarget }
 
     return () => {
       pipeline.current = null

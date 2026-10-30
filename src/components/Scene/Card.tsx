@@ -1,3 +1,4 @@
+import { useTexture } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useEffect, useMemo, useRef } from 'react'
 import {
@@ -6,12 +7,15 @@ import {
   Matrix4,
   Mesh,
   SRGBColorSpace,
+  Shape,
+  ShapeGeometry,
   Vector3,
   type CanvasTexture,
   type Group,
   type MeshStandardMaterial,
 } from 'three'
 import type { Project } from './projects'
+import { revealDelay, revealDuration } from './cardReveal'
 
 // Cosines of the viewing angle: finish fading before the card turns edge-on.
 const edgeFadeStart = 0.35
@@ -23,6 +27,7 @@ type CardProps = {
   project: Project
   fadeStart: number
   fadeEnd: number
+  entranceDelay: number
 }
 
 export default function Card({
@@ -31,7 +36,20 @@ export default function Card({
   project,
   fadeStart,
   fadeEnd,
+  entranceDelay,
 }: CardProps) {
+  const imageTexture = useTexture(project.image.src, (texture) => {
+    // Center-crop the image to cover the existing 4:3 geometry without stretching.
+    const imageAspect = project.image.width / project.image.height
+    const cardAspect = 4 / 3
+    texture.repeat.set(
+      Math.min(1, cardAspect / imageAspect),
+      Math.min(1, imageAspect / cardAspect)
+    )
+    texture.offset.set((1 - texture.repeat.x) / 2, (1 - texture.repeat.y) / 2)
+    texture.colorSpace = SRGBColorSpace
+    texture.needsUpdate = true
+  })
   const mesh = useRef<Group>(null)
   const label = useRef<Mesh>(null)
   const material = useRef<MeshStandardMaterial>(null)
@@ -39,6 +57,48 @@ export default function Card({
   const labelTexture = useRef<CanvasTexture>(null)
   const hovered = useRef(false)
   const hoverAmount = useRef(0)
+  const revealStartedAt = useRef<number | null>(null)
+  const reducedMotion = useRef(false)
+  const cardGeometry = useMemo(() => {
+    const height = (width * 3) / 4
+    const corner = width * 0.06
+    const left = -width / 2
+    const right = width / 2
+    const bottom = -height / 2
+    const top = height / 2
+    const shape = new Shape()
+    shape.moveTo(left + corner, bottom)
+    shape.lineTo(right - corner, bottom)
+    shape.quadraticCurveTo(right, bottom, right, bottom + corner)
+    shape.lineTo(right, top - corner)
+    shape.quadraticCurveTo(right, top, right - corner, top)
+    shape.lineTo(left + corner, top)
+    shape.quadraticCurveTo(left, top, left, top - corner)
+    shape.lineTo(left, bottom + corner)
+    shape.quadraticCurveTo(left, bottom, left + corner, bottom)
+    const geometry = new ShapeGeometry(shape, 8)
+    const positions = geometry.getAttribute('position')
+    const uv = geometry.getAttribute('uv')
+    // Keep the image and label mapped across the full 4:3 card surface.
+    for (let index = 0; index < positions.count; index++) {
+      uv.setXY(
+        index,
+        positions.getX(index) / width + 0.5,
+        positions.getY(index) / height + 0.5
+      )
+    }
+    return geometry
+  }, [width])
+  useEffect(() => () => cardGeometry.dispose(), [cardGeometry])
+  useEffect(() => {
+    const preference = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const update = () => {
+      reducedMotion.current = preference.matches
+    }
+    update()
+    preference.addEventListener('change', update)
+    return () => preference.removeEventListener('change', update)
+  }, [])
   const positions = useMemo(
     () => ({ card: new Vector3(), camera: new Vector3() }),
     []
@@ -73,8 +133,25 @@ export default function Card({
     return hitTest
   }, [radius])
 
-  useFrame(({ camera }, delta) => {
+  useFrame(({ camera, clock }, delta) => {
     if (!mesh.current || !mesh.current.parent) return
+    revealStartedAt.current ??= clock.elapsedTime
+    const progress = reducedMotion.current
+      ? 1
+      : MathUtils.clamp(
+          (clock.elapsedTime -
+            revealStartedAt.current -
+            revealDelay -
+            entranceDelay) /
+            revealDuration,
+          0,
+          1
+        )
+    // Ease out past full size, then settle back for a spring-like entrance.
+    const overshoot = 1.70158
+    const remaining = progress - 1
+    const reveal =
+      1 + (overshoot + 1) * remaining ** 3 + overshoot * remaining ** 2
     // Measure visibility at rest so lifting a card doesn't change its fade.
     positions.card.set(0, 0, radius + 0.01)
     mesh.current.parent.localToWorld(positions.card)
@@ -88,7 +165,9 @@ export default function Card({
     const edgeOpacity = MathUtils.smoothstep(facing, edgeFadeEnd, edgeFadeStart)
     const latitude = Math.abs(mesh.current.parent.rotation.x)
     const opacity =
-      edgeOpacity * (1 - MathUtils.smoothstep(latitude, fadeStart, fadeEnd))
+      (progress > 0 ? 1 : 0) *
+      edgeOpacity *
+      (1 - MathUtils.smoothstep(latitude, fadeStart, fadeEnd))
     mesh.current.visible = opacity > 0
     if (material.current) material.current.opacity = opacity
     if (labelMaterial.current) labelMaterial.current.opacity = opacity
@@ -101,7 +180,9 @@ export default function Card({
       delta
     )
     mesh.current.position.z = radius + 0.01 + width * 0.15 * hoverAmount.current
-    mesh.current.scale.setScalar(0.9 + 0.045 * hoverAmount.current)
+    mesh.current.scale.setScalar(
+      Math.max(0, reveal) * (0.9 + 0.045 * hoverAmount.current)
+    )
     if (label.current) {
       label.current.position.z = 0.002 + width * 0.06 * hoverAmount.current
     }
@@ -123,7 +204,10 @@ export default function Card({
     const draw = () => {
       if (cancelled) return
       ctx.clearRect(0, 0, surface.width, surface.height)
-      ctx.fillStyle = '#242424'
+      ctx.fillStyle = '#ffffff'
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.85)'
+      ctx.shadowBlur = 8
+      ctx.shadowOffsetY = 2
       ctx.font = font
       ctx.letterSpacing = '-0.05em'
       ctx.textAlign = 'left'
@@ -158,10 +242,11 @@ export default function Card({
           hovered.current = false
         }}
       >
-        <planeGeometry args={[width, (width * 3) / 4]} />
+        <primitive object={cardGeometry} attach="geometry" />
         <meshStandardMaterial
           ref={material}
-          color="#f4f0e8"
+          opacity={0}
+          map={imageTexture}
           roughness={0.85}
           side={DoubleSide}
           transparent
@@ -169,9 +254,10 @@ export default function Card({
         />
       </mesh>
       <mesh ref={label} position={[0, 0, 0.002]} raycast={() => {}}>
-        <planeGeometry args={[width, (width * 3) / 4]} />
+        <primitive object={cardGeometry} attach="geometry" />
         <meshStandardMaterial
           ref={labelMaterial}
+          opacity={0}
           roughness={0.85}
           side={DoubleSide}
           transparent
