@@ -54,8 +54,8 @@ function SphereWithCards() {
 
   return (
     <group>
-      <Atmosphere radius={radius} />
-      <ParticleSphere radius={radius} />
+      <Atmosphere radius={radius * 2} />
+      <ParticleSphere radius={radius * 2} />
       {Array.from({ length: ribbonCount }, (_, index) => (
         <group key={index} rotation={[0, index * ribbonSpacing, 0]}>
           <RibbonCards

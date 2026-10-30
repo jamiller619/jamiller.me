@@ -1,6 +1,6 @@
 import { useFrame } from '@react-three/fiber'
 import { useMemo, useRef } from 'react'
-import { AdditiveBlending, type ShaderMaterial } from 'three'
+import { AdditiveBlending, MathUtils, type ShaderMaterial } from 'three'
 
 const vertexShader = /* glsl */ `
   uniform float time;
@@ -82,12 +82,14 @@ export default function ParticleSphere({ radius }: { radius: number }) {
       // Match the atmosphere's broad patches and finer wisps.
       const broad = Math.sin(x * 3 + y * 2 + 0.7) * Math.cos(y * 4 - x + 1.2)
       const detail = Math.sin(x * 9 + y * 7 + 0.4)
-      const density = Math.max(
-        0,
-        Math.min(1, (broad * 0.8 + detail * 0.2 + 0.7) / 1.4)
+      const density = MathUtils.smoothstep(
+        broad * 0.8 + detail * 0.2,
+        -0.7,
+        0.7
       )
-      const patch = density * density * (3 - 2 * density)
-      if (random() > 0.2 + patch * 0.8) continue
+      // Use Atmosphere's coverage curve, with only a trace of dust in its voids.
+      const coverage = MathUtils.smoothstep(density, 0.3, 0.9)
+      if (random() > 0.02 + coverage * 0.98) continue
       const isDust = i >= count * 0.8
       // A thin shell defines the sphere; loose dust breaks up its silhouette.
       const distance = isDust
@@ -108,24 +110,37 @@ export default function ParticleSphere({ radius }: { radius: number }) {
   })
 
   return (
-    <points scale={radius} layers-mask={2}>
-      <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          args={[particles.positions, 3]}
+    <group scale={radius}>
+      {/* The opaque core writes depth before the transparent particles and haze. */}
+      <mesh layers-mask={2} raycast={() => {}}>
+        <sphereGeometry args={[0.98, 96, 64]} />
+        <meshBasicMaterial color="#050914" depthWrite depthTest />
+      </mesh>
+      <points layers-mask={2}>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            args={[particles.positions, 3]}
+          />
+          <bufferAttribute
+            attach="attributes-seed"
+            args={[particles.seeds, 1]}
+          />
+          <bufferAttribute
+            attach="attributes-dust"
+            args={[particles.dust, 1]}
+          />
+        </bufferGeometry>
+        <shaderMaterial
+          ref={material}
+          uniforms={uniforms}
+          vertexShader={vertexShader}
+          fragmentShader={fragmentShader}
+          transparent
+          depthWrite={false}
+          blending={AdditiveBlending}
         />
-        <bufferAttribute attach="attributes-seed" args={[particles.seeds, 1]} />
-        <bufferAttribute attach="attributes-dust" args={[particles.dust, 1]} />
-      </bufferGeometry>
-      <shaderMaterial
-        ref={material}
-        uniforms={uniforms}
-        vertexShader={vertexShader}
-        fragmentShader={fragmentShader}
-        transparent
-        depthWrite={false}
-        blending={AdditiveBlending}
-      />
-    </points>
+      </points>
+    </group>
   )
 }
