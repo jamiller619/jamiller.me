@@ -72,25 +72,31 @@ export default function ParticleSphere({ radius }: { radius: number }) {
       state = (Math.imul(state, 1664525) + 1013904223) >>> 0
       return state / 4294967296
     }
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < count;) {
       const y = random() * 2 - 1
       const angle = random() * Math.PI * 2
       const ring = Math.sqrt(1 - y * y)
+      const x = Math.cos(angle) * ring
+      const z = Math.sin(angle) * ring
+      // Keep the shell intact, but populate some regions more densely.
+      // Match the atmosphere's broad patches and finer wisps.
+      const broad = Math.sin(x * 3 + y * 2 + 0.7) * Math.cos(y * 4 - x + 1.2)
+      const detail = Math.sin(x * 9 + y * 7 + 0.4)
+      const density = Math.max(
+        0,
+        Math.min(1, (broad * 0.8 + detail * 0.2 + 0.7) / 1.4)
+      )
+      const patch = density * density * (3 - 2 * density)
+      if (random() > 0.2 + patch * 0.8) continue
       const isDust = i >= count * 0.8
       // A thin shell defines the sphere; loose dust breaks up its silhouette.
       const distance = isDust
         ? 1.02 + random() ** 2 * 0.45
         : 1 + (random() - 0.5) * 0.035
-      positions.set(
-        [
-          Math.cos(angle) * ring * distance,
-          y * distance,
-          Math.sin(angle) * ring * distance,
-        ],
-        i * 3
-      )
+      positions.set([x * distance, y * distance, z * distance], i * 3)
       seeds[i] = random()
       dust[i] = isDust ? 1 : 0
+      i++
     }
     return { positions, seeds, dust }
   }, [])

@@ -6,6 +6,7 @@ import styles from './Scene.module.css'
 import RibbonCards from './RibbonCards'
 import EdgeBlur from './EdgeBlur'
 import ParticleSphere from './ParticleSphere'
+import Atmosphere from './Atmosphere'
 
 const ribbonGap = 1
 const ribbonWidth = 0.25
@@ -53,6 +54,7 @@ function SphereWithCards() {
 
   return (
     <group>
+      <Atmosphere radius={radius} />
       <ParticleSphere radius={radius} />
       {Array.from({ length: ribbonCount }, (_, index) => (
         <group key={index} rotation={[0, index * ribbonSpacing, 0]}>
