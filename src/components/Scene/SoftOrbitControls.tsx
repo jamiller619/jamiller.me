@@ -16,6 +16,8 @@ export default function SoftOrbitControls() {
     const orbit = new OrbitControls(camera.clone(), gl.domElement)
     orbit.enablePan = false
     orbit.enableZoom = false
+    // Keep mouse and touch drags gentle, especially across the wide canvas.
+    orbit.rotateSpeed = 0.7
     orbit.enableDamping = true
     orbit.dampingFactor = 0.08
     // Drift horizontally once every ten minutes; pause while dragging.
